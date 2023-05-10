@@ -68,15 +68,10 @@ $connect->close();
     <script>
         function sendMessage() {
             if (event.key == "Enter") {
-                let addRequest = new XMLHttpRequest();
-                addRequest.onreadystatechange = function () {
-                    if (addRequest.readyState == 4 && addRequest.status == 200) {
-
-                    }
-                }
-                addRequest.open("POST", "addmessage.php", true)
-                addRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                addRequest.send(`message=${message.value}&username=${userName.innerText}`);
+                let addMessageRequest = new XMLHttpRequest();
+                addMessageRequest.open("POST", "addmessage.php", true)
+                addMessageRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                addMessageRequest.send(`message=${message.value}&username=${userName.innerText}`);
                 message.value = "";
             }
         }
