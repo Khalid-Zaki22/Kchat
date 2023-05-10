@@ -58,7 +58,7 @@ $connect->close();
 
     </section>
     <footer class="d-flex justify-content-between container-fluid pt-4">
-        <textarea class="txt form-control me-3" onkeydown="xxxx()"></textarea>
+        <textarea class="txt form-control me-3" onkeydown="sendMessage()"></textarea>
         <button class="send btn btn-primary px-4"><i class="fa-regular fa-paper-plane"></i></button>
     </footer>
     <!--JS Fils-->
@@ -66,7 +66,7 @@ $connect->close();
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/home.js"></script>
     <script>
-        function xxxx() {
+        function sendMessage() {
             if (event.key == "Enter") {
                 let addRequest = new XMLHttpRequest();
                 addRequest.onreadystatechange = function () {
