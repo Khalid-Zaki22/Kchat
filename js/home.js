@@ -4,16 +4,18 @@ let message = document.querySelector(".txt");
 let userName = document.querySelector("h3 span");
 
 sendBtn.onclick = function () {
-    let addRequest = new XMLHttpRequest();
-    addRequest.onreadystatechange = function () {
-        if (addRequest.readyState == 4 && addRequest.status == 200) {
 
-        }
-    }
-    addRequest.open("POST", "addmessage.php", true)
-    addRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    addRequest.send(`message=${message.value}&username=${userName.innerText}`);
+    let formData = new FormData();
+    let file = document.querySelector(".photo");
+    formData.append('message', message.value);
+    formData.append('username', userName.innerText);
+    formData.append('file', file.files[0]);
+    fetch("addmessage.php", {
+        method: "POST",
+        body: formData
+    });
     message.value = "";
+  
 }
 
 
@@ -34,7 +36,7 @@ function getMessages() {
                     let messageBox = document.createElement("div");
                     let messageSender = document.createElement("h6");
                     let messageTxt = document.createElement("p");
-                    let messageDate = document.createElement("h6");
+                    let messageImg = document.createElement("img");
                     messages.append(messageContainer);
                     messageContainer.classList.add("message-container");
                     messageContainer.append(messageBox);
@@ -49,9 +51,15 @@ function getMessages() {
                     messageSender.innerText = json[index].sender;
                     messageBox.append(messageTxt);
                     messageTxt.innerText = json[index].messageText;
-                    messageBox.append(messageDate);
-                    messageDate.innerText = json[index].messageTime;
-                    messages.scrollTo(0, 3000);
+                    if (json[index].messagePhoto != "") {
+                        messageBox.append(messageImg);
+                        messageImg.setAttribute("src", "./imgs/" + json[index].messagePhoto);
+                        messageImg.style.width = "700px";
+                        messageImg.style.maxWidth = "100%";
+
+                    }
+                    messages.scrollTop = messages.scrollHeight;
+                   
                 }
                 count = json.length;
                
@@ -66,5 +74,5 @@ function getMessages() {
     getMessagesRequest.send();
     
 }
-setInterval(getMessages,10);
+setInterval(getMessages,1000);
 

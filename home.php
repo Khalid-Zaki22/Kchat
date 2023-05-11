@@ -46,21 +46,29 @@ $connect->close();
 </head>
 
 <body>
-    <header class="container-fluid py-3 d-flex justify-content-between align-items-center bg-primary">
-        <h3 class="text-white"><i class="fa-solid fa-user me-2"></i><span>
-                <?php echo $user_name; ?>
-            </span></h3>
-        <form action="./logout.php" method="post">
-            <input type="submit" value="Log out" class="btn btn-dark">
-        </form>
-    </header>
-    <section class="messages">
+    <div class="app">
+        <header class="container-fluid py-3 d-flex justify-content-between align-items-center bg-primary">
+            <h3 class="text-white"><i class="fa-solid fa-user me-2"></i><span>
+                    <?php echo $user_name; ?>
+                </span></h3>
+            <form action="./logout.php" method="post">
+                <input type="submit" value="Log out" class="btn btn-dark">
+            </form>
+        </header>
+        <section class="messages">
 
-    </section>
-    <footer class="d-flex justify-content-between container-fluid pt-4">
-        <textarea class="txt form-control me-3" onkeydown="sendMessage()"></textarea>
-        <button class="send btn btn-primary px-4"><i class="fa-regular fa-paper-plane"></i></button>
-    </footer>
+        </section>
+        <footer class="container-fluid pt-4">
+            <form onsubmit="event.preventDefault()" class=" mt-2">
+                <div class="d-flex justify-content-between">
+                    <textarea class="txt form-control me-3 " onkeydown="sendMessage()"></textarea>
+                    <button class="send btn btn-primary px-4"><i class="fa-regular fa-paper-plane"></i></button>
+                </div>
+
+                <input type="file" class="photo form-control mt-2">
+            </form>
+        </footer>
+    </div>
     <!--JS Fils-->
     <script src="./js/popper.js"></script>
     <script src="./js/bootstrap.min.js"></script>
@@ -68,10 +76,15 @@ $connect->close();
     <script>
         function sendMessage() {
             if (event.key == "Enter") {
-                let addMessageRequest = new XMLHttpRequest();
-                addMessageRequest.open("POST", "addmessage.php", true)
-                addMessageRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                addMessageRequest.send(`message=${message.value}&username=${userName.innerText}`);
+                let formData = new FormData();
+                let file = document.querySelector(".photo");
+                formData.append('message', message.value);
+                formData.append('username', userName.innerText);
+                formData.append('file', file.files[0]);
+                fetch("addmessage.php", {
+                    method: "POST",
+                    body: formData
+                });
                 message.value = "";
             }
         }
